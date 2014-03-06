@@ -1,0 +1,74 @@
+<tool id="sirna_offtarget" name="DecoRNAi">
+	<description></description>
+	<command interpreter="sh">offtarget_wrapper.sh $input_file $seed $strand $lambda $library $str $sig $output</command>
+	<inputs>
+		<param name="input_file" type="data" format="txt" label="Input File" help="CSV File containing responce variables and siRNA sequence data."/>
+		<param name="strand" type="select" label="Strand Orientation for Analysis" help="Specify which strand orientation for Analysis.">
+        		<option value="sense">Sense</option>
+        		<option value="antisense">AntiSense</option>
+			<option value="both" selected="true">Both</option>
+      		</param>
+		<param name="lambda" type="float" value="0.001" label="Lambda Value" help="Penalty parameter used in model."/>
+		<param name="seed" type="integer" value="2" label="Seed" min="1" max="14" help="Range: 1-14 Specify the seed region to be used."/>
+		<param name="library" type="select" label="siRNA Library to use" help="Specify siRNA library. Default is custom which requires user input sequences.">
+        		<option value="custom" selected="true">Custom</option>
+        		<option value="ambion">Ambion</option>
+			<option value="new_dharmacon">Dharmacon 2005</option>
+			<option value="old_dharmacon">Dharmacon 2009</option>
+		</param>
+		<param name="str" type="integer" value="1" label="Strength of Seed-Linked Effect." min="1" help="Specify cutoff for strength of seed-linked effect. Must be positive value."/>
+		<param name="sig" type="float" value="0.01" label="Significance P-Value" help="Specify cutoff for significance (P-value)."/>
+  	</inputs>
+	<outputs>
+		<data format="zip" name="output" />
+	</outputs>
+
+
+  	<help>
+
+**Description**
+
+High-throughput RNAi screening has been widely used in a spectrum of biomedical research and made it possible to study functional genomics. However, a challenge for authentic biological interpretation of large-scale siRNA or shRNA-mediated loss-of-function studies is the biological pleiotropy resulting from multiple modes of action of siRNA and shRNA reagents. A major confounding feature of these reagents is the microRNA-like translational quelling that can result from short regions (~6 nucleotides) of oligonucleotide complementarity to many different mRNAs.  To help identify and correct miRNA-mimic off-target effects, we have developed DecoRNAi (deconvolution analysis of RNAi screening data) for automated quantitation and annotation of microRNA-like off-target effects in primary RNAi screening data sets. DecoRNAi can effectively identify and correct off-target effects from primary screening data and provide data visualization for study and publication.  DecoRNAi contains pre-computed seed sequence families for 3 commonly employed commercial siRNA libraries.  For custom collections, the tool will compute seed sequence membership from a user-supplied reagent sequence table.  All parameters are tunable and output files include global data visualization, the identified seed family associations, the siRNA pools containing off-target seed families, corrected z-scores and the potential miRNAs with phenotypes of interest.
+
+
+------
+
+**Manual**
+
+Manual.pdf_
+
+.. _Manual.pdf: http://galaxy.qbrc.org/static/DecoRNAi_Manual.pdf
+
+
+------
+
+**Parameters**
+
+*Input File*
+Name of input file for analysis. This file should contain Gene ID (for example, Gene Entrez ID name), normalized screening data and sense strand siRNA sequences. Default format is a csv (comma separated value) file, in which the first column contains Gene ID name, the second column contains normalized screening data and the following columns are the sense strand siRNA sequences (one sequence per column, i.e., for example, there would be 4 separate sequence columns if 4 oligos are present in a pool). See the user’s manual for details. 
+
+*Strand*
+For identification and quantification of off-target effects, DecoRNAi can employ sense strand only, antisense strand only or both strands. The default setting is using both strands.
+
+*Lambda*
+Penalty parameter in the model for identification of off-target effects. Default is 0.001.
+
+*Seed*
+Specify which hexamer is used to define the seed sequence for analysis. For the most part, a siRNA oligo contains 21 nt. We can therefore assign any of 14 different hexamers as the seed sequence. For example, 1 means nucleotides 5’ 1~6 hexamer and 2 means nucleotides 5’ 2~7 hexamer and etc. Default is 2.
+
+*Library*
+Users can specify the siRNA library for analysis. Seed families are pre-computed for the Dharmacon siGenome (version history 0), Dharmacon siGenome (version history 2), and Ambion. Gene Entrez ID is necessary to map between input data and stored sequences. Users can also upload custom library-wide sequence information for each oligonucleotide or processed siRNA, in which case Gene ID is free of format and type. Default is Custom.
+
+*Strength of seed-linked effect*
+Users can specify the cutoff for strength of seed-linked effect. Must be positive value and default is 1. A smaller value will select more off-target seed families. 
+
+*Significance (P value)*
+Users can specify the cutoff for significance (P value). Default is 0.01. In summary report, False Discovery Rate (FDR) will be provided to control multiple testing issues. .
+
+
+------
+
+**Author** 
+Rui Zhong. For any suggestions or inquiries please contact rui.zhong@utsouthwestern.edu
+  	</help>
+</tool>
